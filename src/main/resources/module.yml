@@ -1,0 +1,5 @@
+name: AIFilter
+version: '1.0.0-SNAPSHOT'
+main: net.voxelarc.allaychat.aifilter.AIFilterModule
+authors: [ hyperion ]
+description: Provides AI powered filter for AllayChat.
