@@ -4,6 +4,7 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import lombok.Getter;
 import net.voxelarc.allaychat.aifilter.filter.AIFilter;
+import net.voxelarc.allaychat.aifilter.listener.DetectionListener;
 import net.voxelarc.allaychat.aifilter.util.AIUtils;
 import net.voxelarc.allaychat.api.module.Module;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,6 +48,8 @@ public final class AIFilterModule extends Module {
                 EXECUTOR.execute(() -> AIUtils.sendMessages(aiClient, AIFilterModule.this));
             }
         }.runTaskTimer(getPlugin(), delay, delay);
+
+        registerListeners(new DetectionListener());
 
         this.getPlugin().addFilter(new AIFilter(this));
     }

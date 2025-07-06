@@ -10,6 +10,7 @@ public class AIResponse {
         public String playerName;
         public float point;
         public Category category;
+        public String message;
     }
 
     public enum Category {

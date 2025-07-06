@@ -16,7 +16,7 @@ ai:
   # If you want to send messages more frequently, you can change this to a lower value.
   # But be careful, as this will increase the cost.
   # AI filter always ran on a separate thread, so it won't affect the performance of the server.
-  send-every: 300 # when should we send messages to the AI? in seconds.
+  send-every: 600 # when should we send messages to the AI? in seconds.
 
 punishments:
   VIOLENT:
@@ -131,9 +131,13 @@ prompt: |
                 "OTHER"
               ],
               "description": "The category of harm detected."
+            },
+            "message": {
+              "type": "string",
+              "description": "The original message content that was flagged as harmful."
             }
           },
-          "required": ["playerName", "point", "category"]
+          "required": ["playerName", "point", "category", "message"]
         }
       }
     },
