@@ -49,7 +49,7 @@ public final class AIFilterModule extends Module {
             }
         }.runTaskTimer(getPlugin(), delay, delay);
 
-        registerListeners(new DetectionListener());
+        registerListeners(new DetectionListener(this));
 
         this.getPlugin().addFilter(new AIFilter(this));
     }
