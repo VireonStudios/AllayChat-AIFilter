@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '9.0.0-beta13'
 }
 
 group = 'net.voxelarc.allaychat'
@@ -31,7 +30,7 @@ dependencies {
 
     compileOnly("net.voxelarc.allaychat:api:1.0.0-SNAPSHOT")
 
-    implementation("com.openai:openai-java:2.12.0")
+    compileOnly("com.openai:openai-java:2.12.0")
 }
 
 def targetJavaVersion = 21
@@ -88,15 +87,4 @@ publishing {
             }
         }
     }
-}
-
-shadowJar {
-    archiveClassifier.set('')
-    minimize()
-    mergeServiceFiles()
-    relocate 'com.openai', 'net.voxelarc.allaychat.aifilter.openai'
-}
-
-build {
-    dependsOn shadowJar
 }
