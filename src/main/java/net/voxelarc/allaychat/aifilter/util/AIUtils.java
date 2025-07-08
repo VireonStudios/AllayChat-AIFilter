@@ -11,13 +11,13 @@ import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class AIUtils {
 
     private static final Gson GSON = new Gson();
 
     public static void sendMessages(OpenAIClient client, AIFilterModule module) {
-        System.out.println("Sending messages to AI for processing...");
         String json = GSON.toJson(new ArrayList<>(module.getMessagesToSend()));
 
         module.getMessagesToSend().clear();
@@ -33,8 +33,6 @@ public class AIUtils {
         AIResponse response = choice.message().content().orElse(null);
         if (response == null) return;
 
-        System.out.println("Received AI response: " + response);
-
         List<String> actions = new ArrayList<>();
         for (AIResponse.Detection detection : response.detections) {
             String playerName = detection.playerName;
@@ -43,7 +41,7 @@ public class AIUtils {
             String message = detection.message;
 
             if (playerName == null || point < 0 || category == null || message == null) {
-                System.out.println("Invalid detection data: " + detection);
+                module.getLogger().log(Level.SEVERE, "Invalid detection data: " + detection);
                 continue;
             }
 
@@ -51,8 +49,6 @@ public class AIUtils {
 
             double threshold = module.getConfig().getDouble("punishments." + category.name() + ".threshold");
             if (point >= threshold) {
-                System.out.println("Processing detection for player: " + playerName + ", category: " + category + ", point: " + point);
-
                 String name = module.getConfig().getString("punishments." + category.name() + ".name", category.name());
                 List<String> commands = module.getConfig().getStringList("punishments." + category.name() + ".commands");
 
