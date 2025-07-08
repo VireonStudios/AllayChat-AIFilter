@@ -6,7 +6,7 @@ import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.StructuredChatCompletion;
 import com.openai.models.chat.completions.StructuredChatCompletionCreateParams;
 import net.voxelarc.allaychat.aifilter.AIFilterModule;
-import net.voxelarc.allaychat.aifilter.api.event.DetectionEvent;
+import net.voxelarc.allaychat.api.event.DetectionEvent;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -56,7 +56,8 @@ public class AIUtils {
                 String name = module.getConfig().getString("punishments." + category.name() + ".name", category.name());
                 List<String> commands = module.getConfig().getStringList("punishments." + category.name() + ".commands");
 
-                DetectionEvent event = new DetectionEvent(playerName, detection);
+                DetectionEvent.Category eventCategory = DetectionEvent.Category.valueOf(category.name());
+                DetectionEvent event = new DetectionEvent(playerName, point, eventCategory, message);
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
 

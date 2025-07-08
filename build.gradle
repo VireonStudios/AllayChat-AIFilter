@@ -18,7 +18,7 @@ repositories {
     }
     maven {
         name = "voxelarc-snapshots"
-        url = "https://repo.voxelarc.net/snapshots"
+        url = "https://repo.voxelarc.net/releases"
     }
 }
 
@@ -28,7 +28,7 @@ dependencies {
 
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
-    compileOnly("net.voxelarc.allaychat:api:1.0.0-SNAPSHOT")
+    compileOnly("net.voxelarc.allaychat:api:1.0.2")
 
     compileOnly("com.openai:openai-java:2.12.0")
 }
