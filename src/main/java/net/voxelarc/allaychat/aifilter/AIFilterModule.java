@@ -4,8 +4,12 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import lombok.Getter;
 import net.voxelarc.allaychat.aifilter.filter.AIFilter;
+import net.voxelarc.allaychat.aifilter.mute.MuteManager;
+import net.voxelarc.allaychat.aifilter.mute.impl.EmptyMuteManager;
+import net.voxelarc.allaychat.aifilter.mute.impl.LiteBansMuteManager;
 import net.voxelarc.allaychat.aifilter.util.AIUtils;
 import net.voxelarc.allaychat.api.module.Module;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -21,6 +25,8 @@ public final class AIFilterModule extends Module {
     private OpenAIClient aiClient;
 
     private final List<PlayerMessage> messagesToSend = new ArrayList<>();
+
+    private MuteManager muteManager;
 
     @Override
     public void onEnable() {
@@ -49,6 +55,15 @@ public final class AIFilterModule extends Module {
         }.runTaskTimer(getPlugin(), delay, delay);
 
         this.getPlugin().addFilter(new AIFilter(this));
+
+        if (Bukkit.getServer().getPluginManager().getPlugin("LiteBans") != null) {
+            getLogger().info("LiteBans detected, using LiteBansMuteManager.");
+            muteManager = new LiteBansMuteManager();
+        } else {
+            getLogger().warning("LiteBans not found, using empty mute manager.");
+            muteManager = new EmptyMuteManager();
+        }
+
     }
 
     @Override
