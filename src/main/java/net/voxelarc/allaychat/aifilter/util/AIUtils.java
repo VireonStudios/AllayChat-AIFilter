@@ -5,12 +5,15 @@ import com.openai.client.OpenAIClient;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.StructuredChatCompletion;
 import com.openai.models.chat.completions.StructuredChatCompletionCreateParams;
+import litebans.api.Database;
 import net.voxelarc.allaychat.aifilter.AIFilterModule;
 import net.voxelarc.allaychat.api.event.DetectionEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class AIUtils {
@@ -42,6 +45,17 @@ public class AIUtils {
 
             if (playerName == null || point < 0 || category == null || message == null) {
                 module.getLogger().log(Level.SEVERE, "Invalid detection data: " + detection);
+                continue;
+            }
+
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+            UUID uuid = offlinePlayer.getUniqueId();
+
+            boolean isMuted = Database.get().isPlayerMuted(uuid, null);
+            boolean isBanned = Database.get().isPlayerBanned(uuid, null);
+
+            if (isMuted || isBanned) {
+                module.getLogger().log(Level.INFO, "Skipping punishment for " + playerName + " (already muted or banned)");
                 continue;
             }
 
