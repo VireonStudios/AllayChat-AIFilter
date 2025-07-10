@@ -45,6 +45,11 @@ public class AIUtils {
                 continue;
             }
 
+            if (module.getMuteManager().isBannedOrMuted(playerName)) {
+                module.getLogger().log(Level.INFO, "Skipping punishment for " + playerName + " (already muted or banned)");
+                continue;
+            }
+
             if (module.getConfig().getConfigurationSection("punishments." + category.name()) == null) continue;
 
             double threshold = module.getConfig().getDouble("punishments." + category.name() + ".threshold");
