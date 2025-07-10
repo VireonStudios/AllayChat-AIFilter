@@ -26,7 +26,7 @@ public final class AIFilterModule extends Module {
 
     private final List<PlayerMessage> messagesToSend = new ArrayList<>();
 
-    private MuteManager muteManager;
+    private MuteManager muteManager = new EmptyMuteManager();
 
     @Override
     public void onEnable() {
@@ -59,11 +59,7 @@ public final class AIFilterModule extends Module {
         if (Bukkit.getServer().getPluginManager().getPlugin("LiteBans") != null) {
             getLogger().info("LiteBans detected, using LiteBansMuteManager.");
             muteManager = new LiteBansMuteManager();
-        } else {
-            getLogger().warning("LiteBans not found, using empty mute manager.");
-            muteManager = new EmptyMuteManager();
         }
-
     }
 
     @Override
