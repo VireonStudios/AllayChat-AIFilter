@@ -10,12 +10,12 @@ import net.voxelarc.allaychat.aifilter.mute.impl.LiteBansMuteManager;
 import net.voxelarc.allaychat.aifilter.util.AIUtils;
 import net.voxelarc.allaychat.api.module.Module;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public final class AIFilterModule extends Module {
@@ -43,16 +43,10 @@ public final class AIFilterModule extends Module {
             seconds = 30;
         }
 
-        long delay = seconds * 20L;
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (messagesToSend.isEmpty()) return;
-
-                EXECUTOR.execute(() -> AIUtils.sendMessages(aiClient, AIFilterModule.this));
-            }
-        }.runTaskTimer(getPlugin(), delay, delay);
+        this.getPlugin().getScheduler().runTimer(() -> {
+            if (messagesToSend.isEmpty()) return;
+            EXECUTOR.execute(() -> AIUtils.sendMessages(aiClient, AIFilterModule.this));
+        }, seconds, seconds, TimeUnit.SECONDS);
 
         this.getPlugin().addFilter(new AIFilter(this));
 

@@ -34,6 +34,7 @@ public class AIUtils {
         if (response == null) return;
 
         List<String> actions = new ArrayList<>();
+        List<String> flaggedPlayers = new ArrayList<>();
         for (AIResponse.Detection detection : response.detections) {
             String playerName = detection.playerName;
             float point = detection.point;
@@ -47,6 +48,11 @@ public class AIUtils {
 
             if (module.getMuteManager().isBannedOrMuted(playerName)) {
                 module.getLogger().log(Level.INFO, "Skipping punishment for " + playerName + " (already muted or banned)");
+                continue;
+            }
+
+            if (flaggedPlayers.contains(playerName) && module.getConfig().getBoolean("ai.dont-flag-multiple-times", true)) {
+                module.getLogger().log(Level.INFO, "Skipping punishment for " + playerName + " (already punished in this batch)");
                 continue;
             }
 
@@ -69,12 +75,14 @@ public class AIUtils {
                             .replace("<message>", message)
                     );
                 }
+
+                flaggedPlayers.add(playerName);
             }
         }
 
         if (actions.isEmpty()) return;
 
-        Bukkit.getScheduler().runTask(module.getPlugin(), () -> {
+        module.getPlugin().getScheduler().runNextTick((task) -> {
             for (String command : actions) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             }

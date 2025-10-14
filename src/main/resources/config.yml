@@ -18,6 +18,8 @@ ai:
   # AI filter always ran on a separate thread, so it won't affect the performance of the server.
   send-every: 600 # when should we send messages to the AI? in seconds.
 
+  dont-flag-multiple-times: true # if a player sends multiple harmful messages, should we only flag the first one? true/false.
+
 punishments:
   VIOLENT:
     name: "Violent Threats or Glorification"
